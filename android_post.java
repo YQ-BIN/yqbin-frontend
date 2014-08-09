@@ -1,70 +1,30 @@
-		String ret = "";
-		String comment = "";
-		// URL
-		URI url = null;
-		
-		try {
-			url = new URI("http://yq-bin.sakura.ne.jp/order_insert.php");
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-			ret = e.toString();
-		}
 
-		// POSTパラメータ付きでPOSTリクエストを構築
-		HttpPost request = new HttpPost(url);
-		List<NameValuePair> post_params = new ArrayList<NameValuePair>();
-		value.add(new BasicNameValuePair("user", "test"));
-		value.add(new BasicNameValuePair("start", spinner1.getSelectedItem().toString()));
-		value.add(new BasicNameValuePair("goal",  spinner2.getSelectedItem().toString()));
-		value.add(new BasicNameValuePair("temp", "temp"));
+    public class PostMessageTask extends AsyncTask<String, Integer, Integer> {
+    	 
+        @Override
+        protected Integer doInBackground(String... contents) {
+        	
+        	String url="http://yq-bin.sakura.ne.jp/order_insert.php";
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost post = new HttpPost(url);
+     
+            ArrayList <NameValuePair> params = new ArrayList <NameValuePair>();
+    		params.add(new BasicNameValuePair("user", "test"));
+    		params.add(new BasicNameValuePair("start", spinner1.getSelectedItem().toString()));
+    		params.add(new BasicNameValuePair("goal",  spinner2.getSelectedItem().toString()));
+    		params.add(new BasicNameValuePair("temp", "temp"));
 
-		try {
-			// 送信パラメータのエンコードを指定
-			request.setEntity(new UrlEncodedFormEntity(post_params, "UTF-8"));
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		}
-
-		// POSTリクエストを実行
-		DefaultHttpClient httpClient = new DefaultHttpClient();
-		try {
-				ret = httpClient.execute(request, new ResponseHandler<String>() {
-
-				@Override
-				public String handleResponse(HttpResponse response)
-						throws IOException {
-
-					// 正常に受信できた場合は200
-					switch (response.getStatusLine().getStatusCode()) {
-					case HttpStatus.SC_OK:
-						// Log.d("posttest", "レスポンス取得に成功");
-						// レスポンスデータをエンコード済みの文字列として取得する
-						return EntityUtils.toString(response.getEntity(),
-								"UTF-8");
-
-					case HttpStatus.SC_NOT_FOUND:
-						// Log.d("posttest", "データが存在しない");
-						return null;
-
-					default:
-						// Log.d("posttest", "通信エラー");
-						// break;
-						return null;
-					}
-
-				}
-
-			});
-
-		} catch (IOException e) {
-			// Log.d("posttest", "通信に失敗：" + e.toString());
-		} finally {
-			// shutdownすると通信できなくなる
-			httpClient.getConnectionManager().shutdown();
-		}
-		
-		if (ret == null) {
-			ret = "";
-		} else {
-		}
-	}
+            HttpResponse res = null;
+            
+            try {
+                post.setEntity(new UrlEncodedFormEntity(params, "utf-8"));
+                res = httpClient.execute(post);
+                Log.d("post", "送信完了");
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.d("post", e.toString());
+            }
+     	    return Integer.valueOf(res.getStatusLine().getStatusCode());
+        }
+     
+    }
