@@ -13,8 +13,10 @@
 		// POSTパラメータ付きでPOSTリクエストを構築
 		HttpPost request = new HttpPost(url);
 		List<NameValuePair> post_params = new ArrayList<NameValuePair>();
-		value.add(new BasicNameValuePair("word", sentence));
-		value.add(new BasicNameValuePair("type", String.valueOf(type)));
+		value.add(new BasicNameValuePair("user", "test"));
+		value.add(new BasicNameValuePair("start", spinner1.getSelectedItem().toString()));
+		value.add(new BasicNameValuePair("goal",  spinner2.getSelectedItem().toString()));
+		value.add(new BasicNameValuePair("temp", "temp"));
 
 		try {
 			// 送信パラメータのエンコードを指定
