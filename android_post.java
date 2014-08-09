@@ -1,8 +1,8 @@
-	public static String get_yahoo(String sentence,Integer type) {
 		String ret = "";
 		String comment = "";
 		// URL
 		URI url = null;
+		
 		try {
 			url = new URI("http://yq-bin.sakura.ne.jp/order_insert.php");
 		} catch (URISyntaxException e) {
@@ -26,8 +26,7 @@
 		// POSTリクエストを実行
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		try {
-			// //Log.d("posttest", "POST開始");
-			ret = httpClient.execute(request, new ResponseHandler<String>() {
+				ret = httpClient.execute(request, new ResponseHandler<String>() {
 
 				@Override
 				public String handleResponse(HttpResponse response)
@@ -61,13 +60,9 @@
 			// shutdownすると通信できなくなる
 			httpClient.getConnectionManager().shutdown();
 		}
-
+		
 		if (ret == null) {
 			ret = "";
-			// SpeechText("取得できませんでした");
 		} else {
-
 		}
-		return ret;
-
 	}
